@@ -1,6 +1,8 @@
 package com.example.rest_api.services;
 
-import com.example.rest_api.dtos.ProductDTO;
+import com.example.rest_api.dtos.ProductRequestDTO;
+import com.example.rest_api.dtos.ProductResponseDTO;
+import com.example.rest_api.mappers.ProductMapper;
 import com.example.rest_api.models.Product;
 import com.example.rest_api.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,55 +14,44 @@ import java.util.stream.Collectors;
 @Service
 public class ProductService {
 
-    private final ProductRepository productRepository;
+    private final ProductRepository repository;
+    private final ProductMapper mapper;
 
     @Autowired
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    public ProductService(ProductRepository repository, ProductMapper mapper) {
+        this.repository = repository;
+        this.mapper = mapper;
     }
 
-    private ProductDTO mapToDTO(Product product) {
-        return new ProductDTO(product.getName(), product.getDescription(), product.getPrice());
-    }
-
-    private Product mapToEntity(ProductDTO productDTO) {
-        var product = new Product();
-        product.setName(productDTO.getName());
-        product.setDescription(productDTO.getDescription());
-        product.setPrice(productDTO.getPrice());
-        return product;
-    }
-
-    public List<ProductDTO> getAllProducts() {
-        return productRepository.findAll().stream()
-                .map(this::mapToDTO)
+    public List<ProductResponseDTO> getAllProducts() {
+        return repository.findAll().stream()
+                .map(mapper::entityToResponse)
                 .collect(Collectors.toList());
     }
 
-    public ProductDTO getProductById(Long id) {
-        return mapToDTO(productRepository.findById(id)
+    public ProductResponseDTO getProductById(Long id) {
+        return mapper.entityToResponse(repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found")));
     }
 
-    public ProductDTO createProduct(ProductDTO productDTO) {
-        return mapToDTO(productRepository.save(mapToEntity(productDTO)));
+    public ProductResponseDTO createProduct(ProductRequestDTO productRequest) {
+        return mapper.entityToResponse(repository.save(mapper.requestToEntity(productRequest)));
     }
 
-    public ProductDTO updateProduct(Long id, ProductDTO productDTO) {
-        Product existingProduct = productRepository.findById(id)
+    public ProductResponseDTO updateProduct(Long id, ProductRequestDTO productRequest) {
+        var product = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
-        existingProduct.setName(productDTO.getName());
-        existingProduct.setDescription(productDTO.getDescription());
-        existingProduct.setPrice(productDTO.getPrice());
-        Product savedProduct = productRepository.save(existingProduct);
-        return mapToDTO(savedProduct);
-
+        product.setName(productRequest.getName());
+        product.setDescription(productRequest.getDescription());
+        product.setPrice(productRequest.getPrice());
+        Product savedProduct = repository.save(product);
+        return mapper.entityToResponse(savedProduct);
     }
 
     public void deleteProduct(Long id) {
-        Product product = productRepository.findById(id)
+        Product product = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
-        productRepository.delete(product);
+        repository.delete(product);
     }
 
 }
