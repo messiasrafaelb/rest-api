@@ -2,7 +2,6 @@ package com.example.rest_api.models;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.math.BigDecimal;
 
 @Getter

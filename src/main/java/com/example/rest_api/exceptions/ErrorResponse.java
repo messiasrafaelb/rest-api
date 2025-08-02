@@ -1,6 +1,7 @@
 package com.example.rest_api.exceptions;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Builder;
 
 import java.time.Instant;

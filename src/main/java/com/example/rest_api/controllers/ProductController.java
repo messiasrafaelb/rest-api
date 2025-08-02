@@ -3,8 +3,10 @@ package com.example.rest_api.controllers;
 import com.example.rest_api.dtos.ProductRequestDTO;
 import com.example.rest_api.dtos.ProductResponseDTO;
 import com.example.rest_api.services.ProductService;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
