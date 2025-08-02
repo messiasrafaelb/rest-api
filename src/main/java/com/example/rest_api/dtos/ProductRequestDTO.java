@@ -13,15 +13,16 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class ProductRequestDTO {
 
-    @NotBlank
-    @Size(max = 100)
+    @NotBlank(message = "{product.name.notblank}")
+    @Size(max = 100, message = "{product.name.size}")
     private String name;
 
-    @NotBlank
-    @Size(max = 300)
+    @NotBlank(message = "{product.description.notblank}")
+    @Size(max = 300, message = "{product.description.size}")
     private String description;
 
-    @Positive
-    @Digits(integer = 9, fraction = 2)
+    @Positive(message = "{product.price.positive}")
+    @Digits(integer = 9, fraction = 2, message = "{product.price.digits}")
     private BigDecimal price;
 }
+
