@@ -31,7 +31,8 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable @Min(1) Long id) {
+    public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable
+                                                             @Min(value = 1, message = "{product.id.min}") Long id) {
         var product = service.getProductById(id);
         return ResponseEntity.ok(product);
     }
@@ -42,13 +43,15 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable @Min(1) Long id,
+    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable
+                                                            @Min(value = 1, message = "{product.id.min}") Long id,
                                                             @Valid @RequestBody ProductRequestDTO productRequest) {
         return ResponseEntity.ok(service.updateProduct(id, productRequest));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable @Min(1) Long id) {
+    public ResponseEntity<Void> deleteProduct(@PathVariable
+                                              @Min(value = 1, message = "{product.id.min}") Long id) {
         service.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }
