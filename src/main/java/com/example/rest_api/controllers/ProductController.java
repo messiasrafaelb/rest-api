@@ -3,16 +3,18 @@ package com.example.rest_api.controllers;
 import com.example.rest_api.dtos.ProductRequestDTO;
 import com.example.rest_api.dtos.ProductResponseDTO;
 import com.example.rest_api.services.ProductService;
-
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Validated
 @RestController
@@ -33,10 +35,14 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable
+    public ResponseEntity<EntityModel<ProductResponseDTO>> getProductById(@PathVariable
                                                              @Min(value = 1, message = "{product.id.min}") Long id) {
         var product = service.getProductById(id);
-        return ResponseEntity.ok(product);
+        var model = EntityModel.of(product);
+        model.add(linkTo(methodOn(ProductController.class).getProductById(id)).withSelfRel());
+        model.add(linkTo(methodOn(ProductController.class).getAllProducts()).withRel("all-products"));
+        model.add(linkTo(methodOn(ProductController.class).deleteProduct(id)).withRel("delete"));
+        return ResponseEntity.ok(model);
     }
 
     @PostMapping
