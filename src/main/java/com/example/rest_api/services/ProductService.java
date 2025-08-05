@@ -31,7 +31,7 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    public ProductResponseDTO getProductById(Long id) {
+    public ProductResponseDTO getProductById(long id) {
         return mapper.entityToResponse(repository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id)));
     }
@@ -40,7 +40,7 @@ public class ProductService {
         return mapper.entityToResponse(repository.save(mapper.requestToEntity(productRequest)));
     }
 
-    public ProductResponseDTO updateProduct(Long id, ProductRequestDTO productRequest) {
+    public ProductResponseDTO updateProduct(long id, ProductRequestDTO productRequest) {
         var product = repository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
         product.setName(productRequest.getName());
@@ -50,7 +50,7 @@ public class ProductService {
         return mapper.entityToResponse(savedProduct);
     }
 
-    public void deleteProduct(Long id) {
+    public void deleteProduct(long id) {
         Product product = repository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
         repository.delete(product);
