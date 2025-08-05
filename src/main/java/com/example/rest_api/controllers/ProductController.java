@@ -8,6 +8,7 @@ import com.example.rest_api.services.ProductService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -32,15 +33,10 @@ public class ProductController {
         this.link = link;
     }
 
-//    @Autowired
-//    public ProductController(ProductService service) {
-//        this.service = service;
-//    }
-
     @GetMapping
-    public ResponseEntity<List<ProductResponseDTO>> getAllProducts() {
+    public ResponseEntity<CollectionModel<EntityModel<ProductResponseDTO>>> getAllProducts() {
         var productsList = service.getAllProducts();
-        return ResponseEntity.ok(productsList);
+        return ResponseEntity.ok(link.linkForGETall(productsList));
     }
 
     @GetMapping("/{id}")
