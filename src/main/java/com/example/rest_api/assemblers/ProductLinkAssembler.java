@@ -1,6 +1,7 @@
 package com.example.rest_api.assemblers;
 
 import com.example.rest_api.controllers.ProductController;
+import com.example.rest_api.dtos.ProductDeleteResponseDTO;
 import com.example.rest_api.dtos.ProductResponseDTO;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -39,7 +40,7 @@ public class ProductLinkAssembler {
         return CollectionModel.of(dtoList);
     }
 
-    public EntityModel<ProductResponseDTO> linkForDELETE(ProductResponseDTO dto) {
+    public EntityModel<ProductDeleteResponseDTO> linkForDELETE(ProductDeleteResponseDTO dto) {
         return EntityModel.of(dto, linkTo(methodOn(ProductController.class).getAllProducts()).withRel("get-all").withType("GET"));
     }
 

@@ -1,5 +1,7 @@
 package com.example.rest_api.controllers;
 
+import com.example.rest_api.assemblers.ProductLinkAssembler;
+import com.example.rest_api.dtos.ProductDeleteResponseDTO;
 import com.example.rest_api.dtos.ProductRequestDTO;
 import com.example.rest_api.dtos.ProductResponseDTO;
 import com.example.rest_api.services.ProductService;
@@ -22,11 +24,18 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class ProductController {
 
     private final ProductService service;
+    private final ProductLinkAssembler link;
 
     @Autowired
-    public ProductController(ProductService service) {
+    public ProductController(ProductService service, ProductLinkAssembler link) {
         this.service = service;
+        this.link = link;
     }
+
+//    @Autowired
+//    public ProductController(ProductService service) {
+//        this.service = service;
+//    }
 
     @GetMapping
     public ResponseEntity<List<ProductResponseDTO>> getAllProducts() {
@@ -38,29 +47,26 @@ public class ProductController {
     public ResponseEntity<EntityModel<ProductResponseDTO>> getProductById(@PathVariable
                                                              @Min(value = 1, message = "{product.id.min}") Long id) {
         var product = service.getProductById(id);
-        var model = EntityModel.of(product);
-        model.add(linkTo(methodOn(ProductController.class).getProductById(id)).withSelfRel());
-        model.add(linkTo(methodOn(ProductController.class).getAllProducts()).withRel("all-products"));
-        model.add(linkTo(methodOn(ProductController.class).deleteProduct(id)).withRel("delete"));
-        return ResponseEntity.ok(model);
+        return ResponseEntity.ok(link.linkForGET(product));
     }
 
     @PostMapping
-    public ResponseEntity<ProductResponseDTO> createProduct(@Valid @RequestBody ProductRequestDTO productRequest) {
-        return ResponseEntity.ok(service.createProduct(productRequest));
+    public ResponseEntity<EntityModel<ProductResponseDTO>> createProduct(@Valid @RequestBody ProductRequestDTO productRequest) {
+        return ResponseEntity.ok(link.linkForPOST(service.createProduct(productRequest)));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable
+    public ResponseEntity<EntityModel<ProductResponseDTO>> updateProduct(@PathVariable
                                                             @Min(value = 1, message = "{product.id.min}") Long id,
                                                             @Valid @RequestBody ProductRequestDTO productRequest) {
-        return ResponseEntity.ok(service.updateProduct(id, productRequest));
+        ProductResponseDTO product = service.updateProduct(id, productRequest);
+        return ResponseEntity.ok(link.linkForPUT(product));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable
+    public ResponseEntity<EntityModel<ProductDeleteResponseDTO>> deleteProduct(@PathVariable
                                               @Min(value = 1, message = "{product.id.min}") Long id) {
-        service.deleteProduct(id);
-        return ResponseEntity.noContent().build();
+        var productDeleted = new ProductDeleteResponseDTO("Product deleted");
+        return ResponseEntity.ok(link.linkForDELETE(productDeleted));
     }
 }
