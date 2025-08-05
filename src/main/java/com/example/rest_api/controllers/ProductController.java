@@ -41,7 +41,7 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<ProductResponseDTO>> getProductById(@PathVariable
-                                                             @Min(value = 1, message = "{product.id.min}") Long id) {
+                                                             @Min(value = 1, message = "{product.id.min}") long id) {
         var product = service.getProductById(id);
         return ResponseEntity.ok(link.linkForGET(product));
     }
@@ -53,7 +53,7 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<ProductResponseDTO>> updateProduct(@PathVariable
-                                                            @Min(value = 1, message = "{product.id.min}") Long id,
+                                                            @Min(value = 1, message = "{product.id.min}") long id,
                                                             @Valid @RequestBody ProductRequestDTO productRequest) {
         ProductResponseDTO product = service.updateProduct(id, productRequest);
         return ResponseEntity.ok(link.linkForPUT(product));
@@ -61,7 +61,7 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<EntityModel<ProductDeleteResponseDTO>> deleteProduct(@PathVariable
-                                              @Min(value = 1, message = "{product.id.min}") Long id) {
+                                              @Min(value = 1, message = "{product.id.min}") long id) {
         var productDeleted = new ProductDeleteResponseDTO("Product deleted");
         return ResponseEntity.ok(link.linkForDELETE(productDeleted));
     }
