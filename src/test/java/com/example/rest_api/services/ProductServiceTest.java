@@ -1,10 +1,9 @@
-package unit.com.example.rest_api.service;
+package com.example.rest_api.services;
 
 import com.example.rest_api.dtos.ProductResponseDTO;
 import com.example.rest_api.mappers.ProductMapper;
 import com.example.rest_api.models.Product;
 import com.example.rest_api.repositories.ProductRepository;
-import com.example.rest_api.services.ProductService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,19 +31,25 @@ public class ProductServiceTest {
 
     @Test
     @DisplayName("Should return a list of products")
-    void test_getAllProducts_sucess() {
+    void test_getAllProducts_happy() {
         var mockEntity1 = new Product(1L, "Teste", "Teste", new BigDecimal(1));
         var mockEntity2 = new Product(2L, "Teste2", "Teste2", new BigDecimal(2));
         var mockDTO1 = new ProductResponseDTO(1L,"Teste",  new BigDecimal(1));
         var mockDTO2 = new ProductResponseDTO(2L, "Teste2",  new BigDecimal(2));
-
         when(repository.findAll()).thenReturn(List.of(mockEntity1, mockEntity2));
         when(mapper.entityToResponse(mockEntity1)).thenReturn(mockDTO1);
         when(mapper.entityToResponse(mockEntity2)).thenReturn(mockDTO2);
         List<ProductResponseDTO> result = service.getAllProducts();
-
         assertThat(result).containsExactly(mockDTO1, mockDTO2);
-
     }
+
+    @Test
+    @DisplayName("Should return a empty list when no products exist")
+    void test_getAllProducts_edge() {
+        when(repository.findAll()).thenReturn(List.of());
+        List<ProductResponseDTO> result = service.getAllProducts();
+        assertThat(result).isEmpty();
+    }
+
 
 }
