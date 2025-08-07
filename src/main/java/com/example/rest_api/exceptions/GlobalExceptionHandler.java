@@ -121,4 +121,16 @@ public class GlobalExceptionHandler {
                 .build();
         return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(response);
     }
+
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<ErrorResponse> handleNullPointerException(HttpServletRequest request) {
+        var response = ErrorResponse.builder()
+                .timestamp(Instant.now())
+                .status(INTERNAL_SERVER_ERROR.value())
+                .error(INTERNAL_SERVER_ERROR.getReasonPhrase())
+                .message("An unexpected error occurred with entity values")
+                .path(request.getRequestURI())
+                .build();
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(response);
+    }
 }
