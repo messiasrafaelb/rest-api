@@ -1,5 +1,6 @@
 package com.example.rest_api.services;
 
+import com.example.rest_api.dtos.ProductDeleteResponseDTO;
 import com.example.rest_api.dtos.ProductRequestDTO;
 import com.example.rest_api.dtos.ProductResponseDTO;
 import com.example.rest_api.exceptions.ProductNotFoundException;
@@ -50,10 +51,11 @@ public class ProductService {
         return mapper.entityToResponse(savedProduct);
     }
 
-    public void deleteProduct(long id) {
+    public ProductDeleteResponseDTO deleteProduct(long id) {
         Product product = repository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
         repository.delete(product);
+        return new ProductDeleteResponseDTO("Product deleted");
     }
 
 }

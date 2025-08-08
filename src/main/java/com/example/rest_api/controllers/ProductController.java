@@ -10,14 +10,10 @@ import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Validated
 @RestController
@@ -35,34 +31,39 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<CollectionModel<EntityModel<ProductResponseDTO>>> getAllProducts() {
-        var productsList = service.getAllProducts();
-        return ResponseEntity.ok(link.linkForGETall(productsList));
+        var products = service.getAllProducts();
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(link.linkForGETall(products));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<ProductResponseDTO>> getProductById(@PathVariable
                                                              @Min(value = 1, message = "{product.id.min}") long id) {
         var product = service.getProductById(id);
-        return ResponseEntity.ok(link.linkForGET(product));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(link.linkForGET(product));
     }
 
     @PostMapping
     public ResponseEntity<EntityModel<ProductResponseDTO>> createProduct(@Valid @RequestBody ProductRequestDTO productRequest) {
-        return ResponseEntity.ok(link.linkForPOST(service.createProduct(productRequest)));
+        var product = service.createProduct(productRequest);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(link.linkForPOST(product));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<ProductResponseDTO>> updateProduct(@PathVariable
                                                             @Min(value = 1, message = "{product.id.min}") long id,
                                                             @Valid @RequestBody ProductRequestDTO productRequest) {
-        ProductResponseDTO product = service.updateProduct(id, productRequest);
-        return ResponseEntity.ok(link.linkForPUT(product));
+        var product = service.updateProduct(id, productRequest);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(link.linkForPUT(product));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<EntityModel<ProductDeleteResponseDTO>> deleteProduct(@PathVariable
                                               @Min(value = 1, message = "{product.id.min}") long id) {
-        service.deleteProduct(id);
-        return ResponseEntity.ok(link.linkForDELETE(new ProductDeleteResponseDTO("Product deleted")));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body(link.linkForDELETE(service.deleteProduct(id)));
     }
 }
