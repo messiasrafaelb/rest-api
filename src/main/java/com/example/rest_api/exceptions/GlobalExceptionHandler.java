@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 import static org.springframework.http.HttpStatus.*;
 
 @RestControllerAdvice
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
@@ -111,7 +114,7 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGenericException(HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleGenericException(Exception exception, HttpServletRequest request) {
         var response = ErrorResponse.builder()
                 .timestamp(Instant.now())
                 .status(INTERNAL_SERVER_ERROR.value())
