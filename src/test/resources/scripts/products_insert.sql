@@ -1,0 +1,16 @@
+INSERT INTO products (name, description, price) VALUES
+('Notebook Gamer', 'Notebook com placa de vídeo dedicada e 16GB de RAM', 5999.90),
+('Mouse Sem Fio', 'Mouse ergonômico com conexão Bluetooth', 149.90),
+('Teclado Mecânico', 'Teclado mecânico com switches silenciosos', 399.00),
+('Monitor 27"', 'Monitor IPS Full HD de 27 polegadas', 1199.50),
+('Headset Gamer', 'Fone de ouvido com microfone e som surround', 349.90),
+('Cadeira Gamer', 'Cadeira ergonômica com ajuste de altura', 899.99),
+('Smartphone', 'Celular Android com 128GB de armazenamento', 2499.00),
+('Tablet', 'Tablet de 10 polegadas com caneta inclusa', 1799.00),
+('Impressora', 'Impressora multifuncional com Wi-Fi', 699.90),
+('HD Externo 2TB', 'HD portátil USB 3.0 com 2TB de capacidade', 429.90),
+('SSD 1TB', 'Unidade SSD NVMe com 1TB de capacidade', 599.00),
+('Webcam Full HD', 'Webcam com 1080p e microfone embutido', 199.90),
+('Microfone Condensador', 'Microfone condensador para estúdios e podcasts', 459.90),
+('Roteador Wi-Fi 6', 'Roteador de alta velocidade com tecnologia Wi-Fi 6', 799.00),
+('Placa de Vídeo RTX 4060', 'Placa de vídeo NVIDIA GeForce RTX 4060 8GB', 2799.90);
