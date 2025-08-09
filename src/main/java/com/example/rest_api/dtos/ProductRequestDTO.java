@@ -1,9 +1,6 @@
 package com.example.rest_api.dtos;
 
-import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +19,7 @@ public class ProductRequestDTO {
     @Size(max = 300, message = "{product.description.size}")
     private String description;
 
+    @NotNull
     @Positive(message = "{product.price.positive}")
     @Digits(integer = 9, fraction = 2, message = "{product.price.digits}")
     private BigDecimal price;
