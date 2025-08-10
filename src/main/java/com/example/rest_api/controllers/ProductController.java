@@ -63,7 +63,7 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public ResponseEntity<EntityModel<ProductDeleteResponseDTO>> deleteProduct(@PathVariable
                                               @Min(value = 1, message = "{product.id.min}") long id) {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(link.linkForDELETE(service.deleteProduct(id)));
     }
 }

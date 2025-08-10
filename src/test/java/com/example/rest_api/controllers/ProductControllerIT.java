@@ -136,9 +136,9 @@ public class ProductControllerIT {
     }
 
     @Test
-    @DisplayName("Should return 204 when delete a product")
+    @DisplayName("Should return 200 when delete a product")
     public void test_deleteProduct_success() throws Exception {
-        mvc.perform(delete(URI.concat("/3"))).andExpect(status().isNoContent());
+        mvc.perform(delete(URI.concat("/3"))).andExpect(status().isOk());
     }
 
     @Test
