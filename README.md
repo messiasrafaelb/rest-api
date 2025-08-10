@@ -22,3 +22,13 @@ Este projeto é uma API RESTful para gerenciamento de produtos, desenvolvida com
 - JUnit 5 + Mockito  
 - Banco de dados em memória H2 para testes  
 - Lombok  
+
+## Endpoints
+
+| Método | Endpoint           | Descrição               |
+| ------ | ------------------ | ----------------------- |
+| GET    | /api/products      | Lista todos os produtos |
+| GET    | /api/products/{id} | Busca produto por ID    |
+| POST   | /api/products      | Cria um novo produto    |
+| PUT    | /api/products/{id} | Atualiza um produto     |
+| DELETE | /api/products/{id} | Remove um produto       |
